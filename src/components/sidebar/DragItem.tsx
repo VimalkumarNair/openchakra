@@ -11,9 +11,10 @@ const DragItem: React.FC<ComponentItemProps> = ({
   isChild,
   rootParentType,
 }) => {
-  const [, drag] = useDrag({
+  const [, drag] = useDrag(() => ({
+    type,
     item: { id: type, type, isMeta, rootParentType },
-  })
+  }))
 
   let boxProps: any = {
     cursor: 'no-drop',

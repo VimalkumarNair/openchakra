@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { XYCoord, useDrop, DragObjectWithType, useDrag } from 'react-dnd'
+import { XYCoord, useDrop, useDrag } from 'react-dnd'
 import ElementListItem from './ElementListItem'
 
 interface Props extends Pick<IComponent, 'type' | 'id'> {
@@ -26,7 +26,7 @@ const ElementListItemDraggable: React.FC<Props> = ({
   const ref = useRef<HTMLDivElement>(null)
   const [, drop] = useDrop({
     accept: ITEM_TYPE,
-    hover(item: DragObjectWithType, monitor) {
+    hover(monitor) {
       if (!ref.current) {
         return
       }
@@ -39,14 +39,14 @@ const ElementListItemDraggable: React.FC<Props> = ({
       const hoverBoundingRect = ref.current.getBoundingClientRect()
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
-      const clientOffset = monitor.getClientOffset()
-      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return
-      }
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return
-      }
+      // const clientOffset = monitor.getClientOffset()
+      // const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top
+      // if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      //   return
+      // }
+      // if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+      //   return
+      // }
       if (moveItem) {
         moveItem(dragIndex, hoverIndex)
       }
@@ -55,6 +55,7 @@ const ElementListItemDraggable: React.FC<Props> = ({
     },
   })
   const [{ isDragging }, drag] = useDrag({
+    type: ITEM_TYPE,
     item: { type: ITEM_TYPE, id, index },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
